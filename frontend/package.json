@@ -1,0 +1,21 @@
+{
+  "name": "monitor-suhu-kelembapan",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Dashboard Vue 3 untuk monitor suhu & kelembapan pengering padi",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.4",
+    "vue": "^3.4.38",
+    "vue-router": "^4.4.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.2",
+    "vite": "^5.4.2"
+  }
+}

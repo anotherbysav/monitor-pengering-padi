@@ -1,0 +1,32 @@
+# ===================== DEPENDENSI (jangan di-upload) =====================
+node_modules/
+frontend/node_modules/
+vendor/
+
+# ===================== RAHASIA (PENTING) =====================
+# konfigurasi lokal berisi password database asli
+backend/config.local.php
+.env
+.env.*
+*.pem
+*.key
+
+# ===================== LOG & CACHE =====================
+*.log
+logs/
+storage/logs/
+.php-cs-fixer.cache
+.vite/
+
+# ===================== SISTEM OPERASI =====================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===================== EDITOR =====================
+.vscode/
+.idea/
+*.swp
+
+# CATATAN: public/assets/ SENGAJA ikut di-commit.
+# File hasil build frontend (~0,4 MB) supaya server tidak perlu Node.js.

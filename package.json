@@ -1,0 +1,17 @@
+{
+  "name": "monitor-suhudankelembapan",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Monitor Suhu & Kelembapan Pengering Padi - pembungkus perintah frontend",
+  "scripts": {
+    "postinstall": "npm --prefix frontend install",
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "preview": "npm --prefix frontend run preview",
+    "setup": "php backend/setup.php --demo",
+    "serve": "php -S 127.0.0.1:8000 -t public public/index.php",
+    "seed": "php backend/device/seed_demo.php",
+    "simulate": "php backend/device/simulator.php",
+    "modbus": "php backend/device/modbus_server.php"
+  }
+}

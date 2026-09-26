@@ -4,6 +4,7 @@
 
 import { reactive, computed } from 'vue'
 import { api, ApiError } from '@/api'
+import { DEMO, demoState } from '@/utils/demo'
 
 /* Re-export agar komponen cukup mengimpor dari '@/stores'. */
 export { api, ApiError }
@@ -51,7 +52,9 @@ export const device = reactive({
   stats: null,
   lastSync: null,
   historyMinutes: 180,
-  paused: false
+  paused: false,
+  // true bila data berasal dari mode demo (tanpa backend)
+  demo: false
 })
 
 export const isOnline = computed(() => {
@@ -95,7 +98,15 @@ export async function loadState({ full = true, minutes } = {}) {
     applyState(res.data)
     device.booted = true
   } catch (err) {
-    device.error = err.message
+    // GitHub Pages tidak punya backend. Kalau VITE_DEMO=1, isi dengan data
+    // contoh supaya dashboard tetap tampil utuh.
+    if (DEMO) {
+      applyState(demoState())
+      device.booted = true
+      device.demo = true
+    } else {
+      device.error = err.message
+    }
   } finally {
     device.loading = false
   }
@@ -111,7 +122,12 @@ export function startPolling(intervalMs = 2500) {
       const res = await api.pulse()
       applyState(res.data)
     } catch (err) {
-      device.error = err.message
+      if (DEMO) {
+        applyState(demoState())
+        device.demo = true
+      } else {
+        device.error = err.message
+      }
     }
   }, intervalMs)
 }

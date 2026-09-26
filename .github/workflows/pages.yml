@@ -1,0 +1,74 @@
+name: Deploy Dashboard ke GitHub Pages
+
+# Jalankan otomatis setiap kali ada push ke branch main,
+# atau bisa dipicu manual dari tab Actions.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Cancel build lama kalau ada push baru -> hemat kuota
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependensi
+        run: npm install
+
+      - name: Build frontend
+        env:
+          # Base path ikut nama repo (GitHub Pages menyajikan di /<nama-repo>/)
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          # GitHub Pages tidak bisa menjalankan PHP/MySQL, jadi tampilkan
+          # data contoh supaya dashboard tetap terlihat utuh.
+          # Hapus baris ini (-> false) setelah backend di-host terpisah
+          # dan VITE_API_BASE diarahkan ke URL backend.
+          VITE_DEMO: '1'
+        run: npm run build
+
+      - name: Siapkan folder Pages
+        run: |
+          # Salin hanya file statis. index.php & .htaccess TIDAK ikut karena
+          # Pages tidak mengeksekusinya - hanya akan menampilkan source code.
+          mkdir -p _site
+          cp -r public/assets _site/
+          cp public/index.html _site/
+          cp public/favicon.svg _site/ 2>/dev/null || true
+          # Matikan Jekyll agar file berawalan _ tidak diabaikan
+          touch _site/.nojekyll
+          echo "Isi _site:"
+          ls -la _site
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy ke GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

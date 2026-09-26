@@ -30,6 +30,10 @@ function cleanAssetsDir() {
 
 export default defineConfig({
   plugins: [vue(), cleanAssetsDir()],
+  // Base path untuk build. Untuk GitHub Pages (subfolder) set lewat env:
+  //   VITE_BASE_PATH=/monitor-pengering-padi/ npm run build
+  // Tanpa env -> '/' supaya build lokal/PHP tetap jalan seperti sebelumnya.
+  base: process.env.VITE_BASE_PATH || '/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

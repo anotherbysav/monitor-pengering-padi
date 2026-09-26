@@ -1,4 +1,13 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
+
+/**
+ * Mode history:
+ *  - base '/'  -> web history (server PHP/.htaccessHandle rewrite)
+ *  - base subfolder (GitHub Pages) -> hash history, karena Pages tidak punya
+ *    rewrite: membuka /monitor-pengering-padi/kontrol langsung akan 404.
+ */
+const base = import.meta.env.BASE_URL
+const history = base && base !== '/' ? createWebHashHistory(base) : createWebHistory(base)
 
 const routes = [
   {
@@ -42,7 +51,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history,
   routes,
   scrollBehavior: () => ({ top: 0 })
 })

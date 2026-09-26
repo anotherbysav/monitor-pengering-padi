@@ -1,9 +1,16 @@
 /**
  * Klien API terpusat.
- * Semua permintaan memakai prefix /api dan otomatis menertakan cookie session.
+ *
+ * Prefix API bisa diarahkan lewat env VITE_API_BASE. Ini dipakai saat
+ * frontend di-host terpisah dari backend (mis. GitHub Pages untuk
+ * tampilan, Render/Railway untuk PHP + MySQL):
+ *
+ *   VITE_API_BASE=https://aplikasi.onrender.com/api
+ *
+ * Kosongkan untuk memakai /api pada domain yang sama.
  */
+const BASE = import.meta.env.VITE_API_BASE || '/api'
 
-const BASE = '/api'
 
 /** Galat API yang membawa pesan dari server. */
 export class ApiError extends Error {

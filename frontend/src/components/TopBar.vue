@@ -49,6 +49,9 @@ async function refreshNow() {
     <div class="top__left">
       <h1 class="top__title">{{ title }}</h1>
       <div class="top__meta">
+        <span v-if="device.demo" class="badge badge--warn" title="Data contoh, backend belum tersambung">
+          <AppIcon name="alert" :size="11" /> Mode demo
+        </span>
         <span class="badge" :class="isOnline ? 'badge--live' : 'badge--danger'">
           <span class="dot" :class="isOnline ? 'dot--pulse' : ''" />
           {{ isOnline ? 'Sensors online' : 'Sensors offline' }}
